@@ -1,0 +1,68 @@
+[gd_scene load_steps=7 format=3 uid="uid://d3lij6k8jvv7h"]
+
+[ext_resource type="PackedScene" uid="uid://dfwsc20734kqy" path="res://character_body_3d.tscn" id="1_nkdae"]
+[ext_resource type="Script" path="res://main_game.gd" id="1_umi7a"]
+
+[sub_resource type="Environment" id="Environment_g3kck"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_5rssi"]
+albedo_color = Color(0.254902, 0.909804, 0.941176, 0.937255)
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_m36x0"]
+
+[sub_resource type="ConvexPolygonShape3D" id="ConvexPolygonShape3D_x26i6"]
+points = PackedVector3Array(1.01587, 0.015873, 1.01587, -1.01587, -0.015873, -1.01587, -1.01587, 0.015873, -1.01587, 1.01587, -0.015873, -1.01587, -1.01587, -0.015873, 1.01587, -1.01587, 0.015873, 1.01587, 1.01587, 0.015873, -1.01587, 1.01587, -0.015873, 1.01587)
+
+[node name="Node3D" type="Node3D"]
+script = ExtResource("1_umi7a")
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = SubResource("Environment_g3kck")
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 10.5928, 0)
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
+transform = Transform3D(20, 0, 0, 0, 1, 0, 0, 0, 20, 0, 0, 0)
+material_override = SubResource("StandardMaterial3D_5rssi")
+mesh = SubResource("PlaneMesh_m36x0")
+
+[node name="StaticBody3D" type="StaticBody3D" parent="MeshInstance3D"]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="MeshInstance3D/StaticBody3D"]
+shape = SubResource("ConvexPolygonShape3D_x26i6")
+
+[node name="Character3d" parent="." instance=ExtResource("1_nkdae")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.58503, 0)
+
+[node name="CanvasLayer" type="CanvasLayer" parent="."]
+
+[node name="Host" type="Button" parent="CanvasLayer"]
+offset_left = 11.0
+offset_top = 14.0
+offset_right = 281.0
+offset_bottom = 134.0
+text = "Host"
+
+[node name="Join" type="Button" parent="CanvasLayer"]
+offset_left = 306.0
+offset_top = 19.0
+offset_right = 569.0
+offset_bottom = 137.0
+text = "Join
+"
+
+[node name="StartGame" type="Button" parent="CanvasLayer"]
+offset_left = 584.0
+offset_top = 22.0
+offset_right = 835.0
+offset_bottom = 134.0
+text = "Start Game"
+
+[node name="MultiplayerSpawner" type="MultiplayerSpawner" parent="."]
+_spawnable_scenes = PackedStringArray("res://character_body_3d.tscn")
+spawn_path = NodePath("..")
+
+[connection signal="pressed" from="CanvasLayer/Host" to="." method="_on_host_pressed"]
+[connection signal="pressed" from="CanvasLayer/Join" to="." method="_on_join_pressed"]
+[connection signal="pressed" from="CanvasLayer/StartGame" to="." method="_on_start_game_pressed"]
